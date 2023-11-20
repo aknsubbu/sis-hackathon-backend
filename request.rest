@@ -1,0 +1,23 @@
+GET http://localhost:3000/
+
+###
+
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+  "username": "testUser",
+  "email": "testmail@randommail.com",
+  "password": "123"
+}
+
+
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "username": "testUser",
+  "password": "123"
+}
+

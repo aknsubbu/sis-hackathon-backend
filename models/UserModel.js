@@ -14,6 +14,15 @@ const UserSchema = new mongoose.Schema({
     min: 6,
     max: 20,
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    match: /.+\@.+\..+/,
+  },
+  videos: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Video'
+  }],
 });
-
 module.exports = mongoose.model("User", UserSchema);

@@ -65,6 +65,7 @@ app.post("/login", (req, res) => {
             },
             "SECRET_KEY"
           );
+          console.log(data[0].username, data[0].email, data[0]._id)
           res.status(200).json({
             token: token,
             authentication: { type: "bearer", credentials: token },
@@ -81,11 +82,12 @@ app.post("/login", (req, res) => {
 
 app.post("/register", (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
     UserSchema.find({ username: username }).then((data) => {
       if (data.length == 0) {
         const user = new UserSchema({
           username: username,
+          email: email,
           password: password,
         });
         user.save().then((data) => {
