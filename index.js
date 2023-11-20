@@ -34,7 +34,7 @@ const authentication = (req, res, next) => {
     const token = req.headers.authentication_credentials;
     const decoded = jsonwebtoken.verify(token, "SECRET_KEY");
     console.log(decoded);
-    if (decoded.role === "admin") {
+    if (decoded.role === "User") {
       next();
     } else {
       res.status(401).json({ message: "Invalid credentials" });
@@ -46,7 +46,7 @@ const authentication = (req, res, next) => {
   }
 };
 
-app.post("/login", authentication, (req, res) => {
+app.post("/login", (req, res) => {
   try {
     const { username, password } = req.body;
     UserSchema.find({ username: username }).then((data) => {
