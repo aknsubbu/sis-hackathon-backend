@@ -12,8 +12,12 @@ app.use(morgan("dev"));
 
 const port = process.env.PORT || 3000;
 
-const databaseurl = process.env.DATABASE_URL;
+const databaseurl =
+  process.env.DATABASE_URL ||
+  "mongodb+srv://abinav:7RK22ZlEesfW8lyL@cluster0.7r4wtvv.mongodb.net/";
+
 const UserSchema = require("./models/UserModel");
+const VideoSchema = require("./models/VideoSchema");
 
 mongoose.connect(databaseurl, {
   useNewUrlParser: true,
@@ -56,7 +60,7 @@ app.post("/login", (req, res) => {
         if (data[0].password == password) {
           const token = jsonwebtoken.sign(
             {
-              username: req.body.username,
+              userID: data[0]._id,
               role: "admin",
             },
             "SECRET_KEY"
@@ -70,6 +74,52 @@ app.post("/login", (req, res) => {
         }
       }
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post("/register", (req, res) => {
+  try {
+    const { username, password } = req.body;
+    UserSchema.find({ username: username }).then((data) => {
+      if (data.length == 0) {
+        const user = new UserSchema({
+          username: username,
+          password: password,
+        });
+        user.save().then((data) => {
+          res.status(200).json({ message: "User created successfully" });
+        });
+      } else {
+        res.status(401).json({ message: "User already exists" });
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post("/api/generatevideo", authentication, async (req, res) => {
+  try {
+    const { title, article, username } = req.body;
+    const userID = await UserSchema.find({ username: username });
+
+    const video = new VideoSchema({
+      title: title,
+      article: article,
+      userID: userID[0]._id,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post("/api/getvideos", authentication, async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const videos = await VideoSchema.find({ userId: userId });
+    res.status(200).json({ videos: videos });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
