@@ -102,13 +102,12 @@ app.post("/register", (req, res) => {
 
 app.post("/api/generatevideo", authentication, async (req, res) => {
   try {
-    const { title, article, username } = req.body;
-    const userID = await UserSchema.find({ username: username });
+    const { title, article, userID } = req.body;
 
     const video = new VideoSchema({
       title: title,
       article: article,
-      userID: userID[0]._id,
+      userID: userID,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
