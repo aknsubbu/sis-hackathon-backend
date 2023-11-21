@@ -21,3 +21,11 @@ Content-Type: application/json
   "password": "123"
 }
 
+###
+
+GET http://localhost:3000api/getvideos
+
+{
+  "userId": "ObjectId('655bc6f5d4064a0206af4abd')"
+}
+
