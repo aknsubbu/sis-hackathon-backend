@@ -61,14 +61,14 @@ app.post("/login", (req, res) => {
           const token = jsonwebtoken.sign(
             {
               userID: data[0]._id,
-              role: "admin",
+              role: "user",
             },
             "SECRET_KEY"
           );
-          console.log(data[0].username, data[0].email, data[0]._id)
+          console.log(data[0].username, data[0].email, data[0]._id);
           res.status(200).json({
             token: token,
-            authentication: { type: "bearer", credentials: token },
+            authentication: { type: "user", credentials: token },
           });
         } else {
           res.status(401).json({ message: "Invalid credentials" });
@@ -101,7 +101,6 @@ app.post("/register", (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 app.post("/api/getvideos", authentication, async (req, res) => {
   try {
