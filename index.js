@@ -102,19 +102,6 @@ app.post("/register", (req, res) => {
   }
 });
 
-app.post("/api/generatevideo", authentication, async (req, res) => {
-  try {
-    const { title, article, userID } = req.body;
-
-    const video = new VideoSchema({
-      title: title,
-      article: article,
-      userID: userID,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
 
 app.post("/api/getvideos", authentication, async (req, res) => {
   try {
